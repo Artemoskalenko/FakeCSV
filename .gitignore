@@ -4,13 +4,14 @@
 *.pyc
 __pycache__
 db.sqlite3
-media
+media/csv_files
 
 # Backup files #
 *.bak
 
 # If you are using PyCharm #
 # User-specific stuff
+.idea
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
