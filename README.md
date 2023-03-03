@@ -66,8 +66,10 @@ Build an online service for generating CSV files with fake (dummy) data using Py
 ## T E C H N O L O G Y S T A C K
 
 ● Python 3
+
 ● Django
-● Bootstrap, Bulma, UIKit, or any other similar framework for UI
+
+● Bootstrap
 
 
 ## Instalation
