@@ -1,0 +1,42 @@
+{% extends 'fake_csv/base.html' %}
+
+{% block content %}
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+        <div style="display: flex;justify-content: space-between;;padding: 1em;box-sizing: border-box;">
+            <h3>Data schemas</h3>
+            <a href="{% url 'new_schema' %}" type="button" class="btn btn-success">
+                New schema
+            </a>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Modified</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for schema in schemas %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td><a href="{% url 'data_sets' schema_id=schema.id %}">{{ schema.name }}</a></td>
+                <td>{{ schema.modified }}</td>
+                <td>
+                    <a class="link-primary text-decoration-none" href="{% url 'edit_schema' schema_id=schema.id %}">
+                        Edit scheme
+                    </a>
+                    <a class="link-danger text-decoration-none" href="{% url 'delete_schema' schema_id=schema.id %}"
+                    style="margin-left:20px">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

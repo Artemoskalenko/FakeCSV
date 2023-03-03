@@ -1,0 +1,93 @@
+{% extends 'fake_csv/base.html' %}
+
+{% block content %}
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+        <div style="display: flex;justify-content: space-between;;padding: 1em;box-sizing: border-box;">
+            <h3>{{ schema.name }}</h3>
+            <a href="{% url 'edit_schema' schema_id=schema.id %}" type="button"
+               class="btn btn-success">
+                Edit scheme
+            </a>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Column name</th>
+                <th scope="col">Column type</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for column in columns %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ column.name }}</td>
+                <td>{{ column.type }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div style="display: flex;justify-content: space-between;;padding: 1em;box-sizing: border-box;">
+            <h3>Data sets</h3>
+            <div class="row">
+                <form action="{% url 'generate_data' schema_id=schema.id %}" method='POST' class="form-inline">
+                    <fieldset>
+                        {% csrf_token %}
+                        <label for='rows' class='control-label'>
+                            Rows:
+                        </label>
+                        <input
+                                class='input'
+                                style="max-width:80px;height:39px"
+                                type='number'
+                                name='rows'
+                                id='rows'
+                                placeholder='0'
+                                required name='rows'
+                                min='0'
+                                value='1'
+                                step='1'
+                                title='Rows'
+                                pattern='^\d*(\)?$'
+                        >
+                        <button type='submit'
+                                class='btn btn-success'
+                                style="min-width:135px">
+                            Generate data
+                        </button>
+                    </fieldset>
+                </form>
+            </div>
+
+
+        </div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Created</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for data_set in data_sets %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ data_set.created }}</td>
+                {% if data_set.status == 'Processing' %}
+                <td><button style="background-color: #6c757d;" type="button" class="btn btn-secondary" disabled>{{ data_set.status }}</button></td>
+                <td></td>
+                {% else %}
+                <td><button type="button" class="btn btn-success" disabled>{{ data_set.status }}</button></td>
+                <td><a href="{{data_set.file.url}}" id="download-btn{{ data_set.id }}" download class="text-decoration-none">Download</a></td>
+                {% endif%}
+
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'fake_csv/base.html' %}
+
+{% block content %}
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+
+
+        <div class='form-group'>
+            <form action="{% url 'new_schema' %}" method='POST'
+                  enctype='multipart/form-data'>
+                {% csrf_token %}
+                <div style="display: flex;justify-content: space-between;padding: 0px;box-sizing: border-box;">
+                    <h3>New schema</h3>
+                    <button type="submit" class="btn btn-primary">
+                        Submit
+                    </button>
+                </div>
+                <div class='col-lg-6 offset-lg-0'>
+                    <div class="form-error">{{ form.non_field_errors}}</div>
+
+                    <div class='form-group'>
+                        {{ schema_form.as_p }}
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+{% endblock content %}

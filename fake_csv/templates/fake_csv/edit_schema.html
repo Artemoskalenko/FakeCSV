@@ -1,0 +1,97 @@
+{% extends 'fake_csv/base.html' %}
+
+{% block content %}
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+
+
+        <div class='form-group'>
+            <form action="{% url 'edit_schema' schema_id=schema_id %}"
+                  method='POST'
+                  enctype='multipart/form-data'>
+                {% csrf_token %}
+                <div style="display: flex;justify-content: space-between;padding: 0px;box-sizing: border-box;">
+                    <h3>Edit schema</h3>
+                    <button type="submit" class="btn btn-primary">
+                        Submit
+                    </button>
+                </div>
+                <div class='col-lg-6 offset-lg-0'>
+                    <div class="form-error">{{ form.non_field_errors}}</div>
+
+                    <div class='form-group'>
+                        {{ schema_form.as_p }}
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <h3>Schema columns</h3>
+        {% for column_id, form in column_forms.items %}
+        <div class='card-body'>
+
+
+                <form action="{% url 'edit_column' schema_id=schema_id column_id=column_id %}"
+                      method='POST' enctype='multipart/form-data'
+                      class="form-inline">
+                    {% csrf_token %}
+                    <div class="form-error">{{form.non_field_errors }}
+                    </div>
+
+                    <div class="row">
+
+                        {% for field in form %}
+                        <div class="col">
+                            <label for="{{ field.name }}">{{field.label}}</label>{{field }}
+                        </div>
+                        {% endfor %}
+                        <div class="col"><button type='submit' style="margin-top:24px" class="btn btn-primary">Commit</button></div>
+                        <div class="col"><a style="margin-top:24px" class="btn btn-danger" href="{% url 'delete_column' schema_id=schema_id column_id=column_id%}">Delete</a></div>
+                    </div>
+
+                </form>
+
+
+            </div>
+        {% endfor %}
+
+        <div class='card bg-secondary mb-3'>
+            <div class='card-body'>
+
+
+                <form action="{% url 'add_column' schema_id=schema_id %}"
+                      method='POST' enctype='multipart/form-data'
+                      class="form-inline">
+                    {% csrf_token %}
+                    <div class="form-error">{{form.non_field_errors }}
+                        {% if integrity_error %}
+                    <div class="alert alert-danger" role="alert">Order must be a unique value</div>
+                        {% endif %}
+                    </div>
+                    <div class="row">
+                        {% for field in column_form %}
+                        <div class="col">
+                            <label for="{{ field.name}}">{{field.label}}</label>{{field }}
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                    <button type='submit'
+                            class='btn btn-primary' style="margin-top:15px">Add
+                        column
+                    </button>
+
+                </form>
+
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+{% endblock content %}
+
