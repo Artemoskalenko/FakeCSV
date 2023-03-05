@@ -72,7 +72,7 @@ Build an online service for generating CSV files with fake (dummy) data using Py
 ● Bootstrap
 
 
-## Instalation
+## Installation
 
 ● Create a virtual environment:
   ```
