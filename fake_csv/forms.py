@@ -25,4 +25,3 @@ class ColumnForm(forms.ModelForm):
             visible.field.widget.attrs['class'] = 'form-control'
 
 
-
