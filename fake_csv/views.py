@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
@@ -142,16 +142,20 @@ def data_sets_view(request, schema_id):
                    'data_sets': data_sets})
 
 
+def _generate_csv(schema_id, rows):
+    """The function generates a CSV file"""
+    dataset = DataSet.objects.create(schema_id=Schema.objects.get(id=schema_id),
+                                     status='Processing',
+                                     rows=rows)
+    url = generate_csv_file(schema_id=schema_id, rows=rows, dataset_id=dataset.id)
+    return url
+
+
 @login_required
 def generate_data(request, schema_id):
-    """The function generates a CSV file"""
-    if request.method == 'POST':
-        rows = int(request.POST.get('rows'))
-        dataset = DataSet.objects.create(schema_id=Schema.objects.get(id=schema_id),
-                                         status='Processing',
-                                         rows=rows)
-        generate_csv_file(schema_id=schema_id, rows=rows, dataset_id=dataset.id)
-        return redirect('data_sets', schema_id=schema_id)
+    rows = int(request.GET.get('rows'))
+    url = _generate_csv(schema_id, rows)
+    return HttpResponse(str(url), content_type="text/html")
 
 
 class LoginUser(LoginView):

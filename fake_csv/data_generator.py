@@ -29,4 +29,4 @@ def generate_csv_file(schema_id, rows, dataset_id):
     dataset.save_file(path=f'media/csv_files/{filename}', filename=filename)
     dataset.status = 'Ready'
     dataset.save()
-    return
+    return dataset.file.url
